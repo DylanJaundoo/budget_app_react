@@ -5,6 +5,7 @@ import { useGetUserInfo } from '../../hooks/useGetUserInfo';
 import {useNavigate} from "react-router-dom" 
 import { signOut } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
+import "./styles.css";
 
 export const ExpenseTracker = () => {
 
@@ -48,26 +49,26 @@ export const ExpenseTracker = () => {
     <>
     <div className='expense-tracker'>
     {profilePhoto && (
-        <div>
+        <div className='details'>
           <img src={profilePhoto}/>
           <button onClick={signUserOut}>Sign Out</button>
         </div>
       )}
-      <div className="container">
-        <h1>{name}'s Expense Tracker</h1>
-        <div className="balance">
+      <div className="balance-container">
+        <h1>{name}'s Expense Tracker</h1>       
+      <div className="summary">
+        <div className='balance'>
           <h3>Your Balance</h3>
           <h2>${balance}</h2>
         </div>
-        <div className="summary">
-          <div className="income">
-            <h4>Income</h4>
-            <p>${income}</p>
-          </div>
-          <div className="expenses">
-            <h4>Expsneses</h4>
-            <p>${expenses}</p>
-          </div>
+      <div className="income">
+          <h4>Income</h4>
+          <p>${income}</p>
+      </div>
+      <div className="expenses">
+           <h4>Expenses</h4>
+           <p>${expenses}</p>
+     </div>
         </div>
         <form className="add-transaction" onSubmit={onSubmit}>
           <input 
@@ -94,36 +95,32 @@ export const ExpenseTracker = () => {
           checked = {transactionType === "income"}
           />
           <label htmlFor="income">Income</label>
-
-
-          <button type='submit'>Transaction</button>
+          <button  className='transaction-btn' type='submit'>Submit</button>
         </form>
       </div>
     </div>
 
-    
     <div className="transactions">
       <h3>Transactions</h3>
-      <ul>
         {transactions.map((trans) => {
             const { description, transactionAmount, transactionType } =
             trans;
             return (
-              <li>
-                <h4> {description} </h4>
-                <p>
-                  {transactionAmount} 
-                  <label style={{ color: transactionType === "expense" ? "red" : "green", }}>
-                    {transactionType}
-                  </label>
-                </p>
-              </li>
+              <>
+                <div className='transaction-entry'>
+                  <div className='description'><h4>{description}</h4></div>
+                  <div className='amount'>
+                    <p> - {transactionAmount}</p>
+                    <p className='type' style={{ color: transactionType === "expense" ? "red" : "green", }}>{transactionType}</p>
+                  </div>
+                </div>
+              </>
             );
         })}
-      </ul>
-    </div>
+      </div>
     </>
   )
 }
+
 
 
